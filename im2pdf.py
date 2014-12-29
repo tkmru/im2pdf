@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: UTF-8
 
-__description__ = 'Tool to convert image to pdf and unite them.'
+__description__ = 'Tool to convert images to pdf and unite them.'
 __author__ = '@tkmru'
 __version__ = '0.1'
 __date__ = '2014/12/29'
