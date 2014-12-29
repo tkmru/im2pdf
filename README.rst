@@ -23,6 +23,11 @@ github
 | Download from https://github.com/tkmru/im2pdf/.
 | Let's push star!!
 
+::
+
+    $ git clone https://github.com/tkmru/im2pdf/
+    $ cd im2pdf
+    $ python setup.py install
 
 Usage
 =====
