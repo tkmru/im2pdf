@@ -29,27 +29,23 @@ def union(input_files, output_file):
 
     for input_file in input_files:
         if input_file.endswith('.pdf'):
-            fh = open(input_file, 'rb')
-            input = PdfFileReader(fh)
+            input = PdfFileReader(open(input_file, 'rb'))
             num_pages = input.getNumPages()
 
             for i in range(0, num_pages):
                 output.addPage(input.getPage(i))
-            fh.close()
 
         else: # input_file isn't pdf ex. jpeg, png  
             im = PIL.Image.open(input_file)
             input_file_pdf = input_file.split('.')[0]+'.pdf'
             im.save(input_file_pdf, 'PDF', resoultion = 100.0)
 
-            fh = open(input_file_pdf, 'rb')
-            input = PdfFileReader(fh)
+            input = PdfFileReader(open(input_file_pdf, 'rb'))
             num_pages = input.getNumPages()
 
             for i in range(0, num_pages):
                 output.addPage(input.getPage(i))
 
-            fh.close()
             os.remove(input_file_pdf)
 
 
