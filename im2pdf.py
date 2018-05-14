@@ -16,47 +16,60 @@ from PyPDF2 import PdfFileWriter, PdfFileReader
 import os
 import argparse
 
+verbose = False
+
 
 def convert(input_file, output_file):
     im = PIL.Image.open(input_file)
     im.save(output_file, 'PDF', resoultion = 100.0)
-    print('completed.')
-    print(input_file + ' --> ' + output_file)
+    if verbose:
+        print('completed.')
+        print(input_file + ' --> ' + output_file)
 
 
 def union(input_files, output_file):
     output = PdfFileWriter()
+    part_files_handles = [] # [fh, created=True/False]
 
     for input_file in input_files:
         if input_file.endswith('.pdf'):
-            input = PdfFileReader(open(input_file, 'rb'))
+            fh = open(input_file, 'rb')
+            part_files_handles.append([fh, False])
+            input = PdfFileReader(fh)
             num_pages = input.getNumPages()
 
             for i in range(0, num_pages):
                 output.addPage(input.getPage(i))
 
-        else: # input_file isn't pdf ex. jpeg, png  
+        else: # input_file isn't pdf ex. jpeg, png
             im = PIL.Image.open(input_file)
             input_file_pdf = input_file.split('.')[0]+'.pdf'
             im.save(input_file_pdf, 'PDF', resoultion = 100.0)
 
-            input = PdfFileReader(open(input_file_pdf, 'rb'))
+            fh = open(input_file_pdf, 'rb')
+            part_files_handles.append([fh, True])
+            input = PdfFileReader(fh)
             num_pages = input.getNumPages()
 
             for i in range(0, num_pages):
                 output.addPage(input.getPage(i))
 
-            os.remove(input_file_pdf)
-
-
     with open(output_file, 'wb') as outputStream:
         output.write(outputStream)
 
-    print('completed.')
-    print('Union of some file is ' + output_file)
+    for f in part_files_handles:
+        part_path = f[0].name
+        f[0].close() # Close each file.
+        if f[1]:
+            os.remove(part_path) # If 'created' flag is True, remove file a it was created in this process.
+
+    if verbose:
+        print('completed.')
+        print('Union of some file is ' + output_file)
 
 
 if __name__ == '__main__':
+    verbose = True
     parser = argparse.ArgumentParser(description='convert image to pdf and union them.')
     parser.add_argument('-o', '--output', default='output.pdf')
     parser.add_argument('-i', '--input', nargs='*', required=True)
