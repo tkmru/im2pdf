@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# coding: UTF-8 
+# coding: UTF-8
 
 from setuptools import setup
 import os
@@ -14,7 +14,7 @@ with open('README.rst', 'r') as f:
 
 setup(
     name = 'im2pdf',
-    version = '0.1',
+    version = '0.1.1',
     author = '@tkmru',
     author_email = 'i.am.tkmru@gmail.com',
     install_requires = ['Pillow', 'PyPDF2'],
